@@ -2,20 +2,24 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>buyted - プレイヤー主導フリマ</title>
+    <title>buyted - 買い手に優しいフリマ</title>
     <style>
-        body { font-family: sans-serif; margin: 40px; background: #f4f4f4; color: #333; }
-        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 700px; margin: auto; }
-        h1 { color: #007bff; text-align: center; }
-        .section { margin-bottom: 30px; border-bottom: 2px solid #f4f4f4; padding-bottom: 20px; }
-        input, textarea { padding: 10px; margin: 5px 0; width: calc(100% - 22px); border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button.offer-btn { background: #28a745; margin-top: 10px; }
-        .request-card { background: #fff; border: 1px solid #ddd; padding: 15px; margin-top: 10px; border-radius: 8px; }
-        .price { color: #e44d26; font-weight: bold; }
-        .offer-box { background: #f9f9f9; border-left: 4px solid #28a745; padding: 10px; margin-top: 10px; font-size: 0.9em; }
-        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-        .modal-content { background: white; margin: 10% auto; padding: 20px; width: 50%; border-radius: 10px; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 40px; background: #f0f2f5; color: #1c1e21; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
+        h1 { color: #007bff; text-align: center; margin-bottom: 30px; }
+        .section { margin-bottom: 40px; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; }
+        input, textarea { padding: 12px; margin: 8px 0; width: calc(100% - 26px); border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        button:hover { background: #0056b3; }
+        button.offer-btn { background: #28a745; margin-top: 10px; width: 100%; }
+        button.offer-btn:hover { background: #218838; }
+        .request-card { background: white; border: 1px solid #ddd; padding: 20px; margin-top: 15px; border-radius: 10px; }
+        .price { color: #d93025; font-size: 1.2em; font-weight: bold; }
+        .offer-box { background: #f0fff4; border-left: 5px solid #28a745; padding: 15px; margin-top: 15px; border-radius: 0 6px 6px 0; }
+        
+        /* モーダル(ポップアップ)のスタイル */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+        .modal-content { background: white; margin: 10% auto; padding: 30px; width: 80%; max-width: 500px; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -24,25 +28,24 @@
 
         <div class="section">
             <h3>カードをリクエストする</h3>
-            <input type="text" id="cardName" placeholder="カード名">
+            <input type="text" id="cardName" placeholder="カード名 (例: 青眼の白龍)">
             <input type="number" id="price" placeholder="希望価格">
-            <button onclick="sendRequest()">リクエストを投稿</button>
+            <button onclick="sendRequest()">リクエストを投稿する</button>
         </div>
 
         <div id="requestList">
-            <h3>募集中リクエスト</h3>
+            <h3>募集中のリクエスト一覧</h3>
             </div>
     </div>
 
     <div id="offerModal" class="modal">
         <div class="modal-content">
-            <h3>このリクエストに提案する</h3>
-            <p id="modalTargetCard"></p>
+            <h3 id="modalTargetCard">提案を作成</h3>
             <input type="number" id="offerPrice" placeholder="提案価格">
-            <input type="text" id="offerImage" placeholder="写真URL（現在はダミーURLでOK）">
-            <textarea id="offerComment" placeholder="状態の補足説明（右下に微傷あり、など）"></textarea>
+            <input type="text" id="offerImage" placeholder="写真URL (現在はダミーURLでOK)">
+            <textarea id="offerComment" rows="3" placeholder="カードの状態についてのコメント（例: 裏面に微かな白欠けがあります）"></textarea>
             <button onclick="submitOffer()">提案を送信する</button>
-            <button onclick="closeModal()" style="background:#666;">キャンセル</button>
+            <button onclick="closeModal()" style="background:#dc3545; margin-top:10px;">キャンセル</button>
         </div>
     </div>
 

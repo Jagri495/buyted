@@ -1,24 +1,24 @@
 const API_URL = "http://127.0.0.1:8000";
 let currentRequestId = null;
 
-// リクエスト送信
+// リクエスト投稿
 async function sendRequest() {
     const name = document.getElementById('cardName').value;
     const price = document.getElementById('price').value;
-    if(!name || !price) return alert("入力してください");
+    if(!name || !price) return alert("カード名と価格を入力してください");
 
     await fetch(`${API_URL}/requests`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ card_name: name, price: parseInt(price), condition: "美品" })
+        body: JSON.stringify({ card_name: name, price: parseInt(price), condition: "美品以上" })
     });
     location.reload();
 }
 
-// 提案モーダルを開く
+// モーダルの開閉
 function openOfferModal(id, name) {
     currentRequestId = id;
-    document.getElementById('modalTargetCard').innerText = "対象カード: " + name;
+    document.getElementById('modalTargetCard').innerText = `「${name}」への提案`;
     document.getElementById('offerModal').style.display = "block";
 }
 
@@ -26,11 +26,13 @@ function closeModal() {
     document.getElementById('offerModal').style.display = "none";
 }
 
-// 提案を送信
+// 提案の送信
 async function submitOffer() {
     const price = document.getElementById('offerPrice').value;
     const img = document.getElementById('offerImage').value;
     const comment = document.getElementById('offerComment').value;
+
+    if(!price || !img) return alert("価格と画像URLを入力してください");
 
     await fetch(`${API_URL}/offers`, {
         method: 'POST',
@@ -47,14 +49,14 @@ async function submitOffer() {
     location.reload();
 }
 
-// リクエスト一覧と、それに紐づく提案をロード
+// データの一覧表示
 async function loadRequests() {
     const res = await fetch(`${API_URL}/requests`);
     const requests = await res.json();
     const list = document.getElementById('requestList');
     
+    // リクエストごとに、それに紐づく提案も取得
     for (const req of requests.reverse()) {
-        // 各リクエストに対する提案を取得
         const offRes = await fetch(`${API_URL}/offers/${req.id}`);
         const offers = await offRes.json();
 
@@ -62,21 +64,25 @@ async function loadRequests() {
         offers.forEach(off => {
             offersHtml += `
                 <div class="offer-box">
-                    <b>提案あり：${off.offer_price}円</b><br>
-                    コメント：${off.seller_comment}<br>
-                    <small>画像：${off.image_url}</small>
+                    <strong>提案：${off.offer_price.toLocaleString()}円</strong><br>
+                    <span>💬 ${off.seller_comment || "コメントなし"}</span><br>
+                    <small style="color:#666;">🖼 画像URL: ${off.image_url}</small>
                 </div>
             `;
         });
 
         list.innerHTML += `
             <div class="request-card">
-                <b>${req.card_name}</b> - <span class="price">${req.price}円</span> (${req.condition})
-                <br>
-                <button class="offer-btn" onclick="openOfferModal(${req.id}, '${req.card_name}')">提案する</button>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:1.2em; font-weight:bold;">${req.card_name}</span>
+                    <span class="price">${req.price.toLocaleString()}円</span>
+                </div>
+                <p style="color:#666;">希望状態：${req.condition}</p>
+                <button class="offer-btn" onclick="openOfferModal(${req.id}, '${req.card_name}')">このリクエストに応募する</button>
                 <div id="offers-${req.id}">${offersHtml}</div>
             </div>
         `;
     }
 }
+
 loadRequests();
