@@ -27,18 +27,18 @@
         <h1>buyted</h1>
 
         <div class="section">
-            <h3>カードをリクエストする</h3>
-            <input type="text" id="cardName" placeholder="カード名">
-            <input type="text" id="cardRarity" placeholder="レアリティ (例: プリズマティックシークレット)">
-            <select id="cardCondition" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ddd;">
-                <option value="美品">美品（コレクション用）</option>
-                <option value="プレイ用">プレイ用（多少の傷OK）</option>
-                <option value="傷アリ可">傷アリでも可（安さ重視）</option>
-            </select>
-            <textarea id="cardDescription" placeholder="詳細なリクエストコメント（例：右下の欠けは気にしません）"></textarea>
-            <input type="number" id="price" placeholder="希望価格">
-            <button onclick="sendRequest()">リクエストを投稿する</button>
-        </div>
+        <h3>カードをリクエストする</h3>
+        <input type="text" id="cardName" placeholder="カード名">
+        <input type="text" id="cardRarity" placeholder="レアリティ (例: プリズマティックシークレット)">
+        <select id="cardCondition" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ddd;">
+            <option value="美品">美品（コレクション用）</option>
+            <option value="プレイ用">プレイ用（多少の傷OK）</option>
+            <option value="傷アリ可">傷アリでも可（安さ重視）</option>
+        </select>
+        <textarea id="cardDescription" placeholder="詳細なリクエストコメント（例：右下の欠けは気にしません）"></textarea>
+        <input type="number" id="price" placeholder="希望価格">
+        <button onclick="sendRequest()">リクエストを投稿する</button>
+    </div>
 
         <div id="requestList">
             <h3>募集中のリクエスト一覧</h3>
@@ -49,7 +49,8 @@
         <div class="modal-content">
             <h3 id="modalTargetCard">提案を作成</h3>
             <input type="number" id="offerPrice" placeholder="提案価格">
-            <input type="text" id="offerImage" placeholder="写真URL (現在はダミーURLでOK)">
+            <p style="font-size: 13px; margin: 10px 0 5px;">カードの状態をアップロード：</p>
+            <input type="file" id="offerImageFile" accept="image/*">
             <textarea id="offerComment" rows="3" placeholder="カードの状態についてのコメント（例: 裏面に微かな白欠けがあります）"></textarea>
             <button onclick="submitOffer()">提案を送信する</button>
             <button onclick="closeModal()" style="background:#dc3545; margin-top:10px;">キャンセル</button>
