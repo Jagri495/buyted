@@ -28,7 +28,14 @@
 
         <div class="section">
             <h3>カードをリクエストする</h3>
-            <input type="text" id="cardName" placeholder="カード名 (例: 青眼の白龍)">
+            <input type="text" id="cardName" placeholder="カード名">
+            <input type="text" id="cardRarity" placeholder="レアリティ (例: プリズマティックシークレット)">
+            <select id="cardCondition" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ddd;">
+                <option value="美品">美品（コレクション用）</option>
+                <option value="プレイ用">プレイ用（多少の傷OK）</option>
+                <option value="傷アリ可">傷アリでも可（安さ重視）</option>
+            </select>
+            <textarea id="cardDescription" placeholder="詳細なリクエストコメント（例：右下の欠けは気にしません）"></textarea>
             <input type="number" id="price" placeholder="希望価格">
             <button onclick="sendRequest()">リクエストを投稿する</button>
         </div>
