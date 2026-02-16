@@ -68,23 +68,28 @@ async function submitOffer() {
 }
 
 // データの一覧表示
+// データの一覧表示
 async function loadRequests() {
     const res = await fetch(`${API_URL}/requests`);
     const requests = await res.json();
     const list = document.getElementById('requestList');
+    list.innerHTML = '<h3>募集中のリクエスト一覧</h3>'; // 重複防止のために一度クリア
     
-    // リクエストごとに、それに紐づく提案も取得
     for (const req of requests.reverse()) {
         const offRes = await fetch(`${API_URL}/offers/${req.id}`);
         const offers = await offRes.json();
 
         let offersHtml = "";
         offers.forEach(off => {
+            // 承認済みかどうかの判定で見た目を変える
+            const isApproved = off.status === 'approved';
             offersHtml += `
-                <div class="offer-box">
-                    <strong>提案：${off.offer_price.toLocaleString()}円</strong><br>
+                <div class="offer-box" style="${isApproved ? 'background:#e3f2fd; border-left-color:#2196f3;' : ''}">
+                    <strong>提案：${off.offer_price.toLocaleString()}円</strong> 
+                    ${isApproved ? '<b style="color:#2196f3;"> [承認済み]</b>' : ''}<br>
                     <span>💬 ${off.seller_comment || "コメントなし"}</span><br>
-                    <small style="color:#666;">🖼 画像URL: ${off.image_url}</small>
+                    <small style="color:#666;">🖼 画像URL: ${off.image_url}</small><br>
+                    ${(!isApproved) ? `<button onclick="approveOffer(${off.id})" style="background:#2196f3; padding:5px 10px; font-size:12px; margin-top:5px; width:auto;">この提案を承認する</button>` : ''}
                 </div>
             `;
         });
@@ -95,12 +100,14 @@ async function loadRequests() {
                     <span style="font-size:1.2em; font-weight:bold;">${req.card_name}</span>
                     <span class="price">${req.price.toLocaleString()}円</span>
                 </div>
-                <p style="color:#666;">希望状態：${req.condition}</p>
+                <p style="margin: 5px 0; color:#007bff; font-weight:bold;">レアリティ: ${req.rarity || '未指定'}</p>
+                <p style="margin: 5px 0; color:#666;">希望状態：${req.condition}</p>
+                <p style="font-size: 0.9em; background:#f9f9f9; padding:5px; border-radius:4px;">メモ: ${req.description || 'なし'}</p>
+                
                 <button class="offer-btn" onclick="openOfferModal(${req.id}, '${req.card_name}')">このリクエストに応募する</button>
                 <div id="offers-${req.id}">${offersHtml}</div>
             </div>
         `;
     }
 }
-
 loadRequests();
