@@ -4,17 +4,35 @@ let currentRequestId = null;
 // リクエスト投稿
 async function sendRequest() {
     const name = document.getElementById('cardName').value;
+    const rarity = document.getElementById('cardRarity').value;
+    const condition = document.getElementById('cardCondition').value;
+    const description = document.getElementById('cardDescription').value;
     const price = document.getElementById('price').value;
-    if(!name || !price) return alert("カード名と価格を入力してください");
+
+    if(!name || !price) return alert("必須項目を入力してください");
 
     await fetch(`${API_URL}/requests`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ card_name: name, price: parseInt(price), condition: "美品以上" })
+        body: JSON.stringify({ 
+            card_name: name, 
+            rarity: rarity,
+            price: parseInt(price), 
+            condition: condition,
+            description: description
+        })
     });
     location.reload();
 }
+async function approveOffer(offerId) {
+    if(!confirm("この提案を承認して取引を開始しますか？")) return;
 
+    const res = await fetch(`${API_URL}/offers/${offerId}/approve`, { method: 'POST' });
+    if(res.ok) {
+        alert("取引が成立しました！対面または郵送の手続きに進みます。");
+        location.reload();
+    }
+}
 // モーダルの開閉
 function openOfferModal(id, name) {
     currentRequestId = id;
